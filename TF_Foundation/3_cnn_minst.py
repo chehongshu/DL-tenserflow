@@ -54,14 +54,14 @@ Weights = {
     'out': tf.Variable(tf.random_normal([1024, 10]))
 }
 
-Bias = {
+bias= {
     'bc1': tf.Variable(tf.random_normal([32])),
     'bc2': tf.Variable(tf.random_normal([64])),
     'out': tf.Variable(tf.random_normal([10]))
 }
 
 
-logits = inference(xs, Weights, Bias, keep_prob)
+logits = inference(xs, Weights, bias, keep_prob)
 
 cross_entropy = tf.nn.softmax_cross_entropy_with_logits_v2(logits=logits, labels=ys)
 loss = tf.reduce_mean(cross_entropy)
