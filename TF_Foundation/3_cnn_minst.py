@@ -1,6 +1,9 @@
 import tensorflow as tf
 from tensorflow.examples.tutorials.mnist import input_data
 
+"""
+place_holder+conv2d+pool2d+circle+fcn(reshape)+out+get logits+ loss + optimizer+sess(train)+acc
+"""
 minst = input_data.read_data_sets('MINST_data', one_hot=True)
 
 learning_rate = 0.001
@@ -75,8 +78,8 @@ with tf.Session() as sess:
         x_input, y_input = minst.train.next_batch(batch_size)
         sess.run(train_op, feed_dict={xs: x_input, ys: y_input, keep_prob: drop_out})
         if i % display_step or i == 1:
-            ac, los = sess.run([acc, loss], feed_dict={xs: x_input, ys:y_input, keep_prob: 1})
+            ac, los = sess.run([acc, loss], feed_dict={xs: x_input, ys: y_input, keep_prob: 1})
             print("acc is "+"{:.3f}".format(ac)+"   loss is   "+"{:.3f}".format(los))
     print('over')
-    test_ac = sess.run(acc, feed_dict={xs: minst.test.images[:128], ys:minst.test.labels[:128], keep_prob: 1})
+    test_ac = sess.run(acc, feed_dict={xs: minst.test.images[:128], ys: minst.test.labels[:128], keep_prob: 1})
     print("test acc is ", test_ac)
