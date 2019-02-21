@@ -1,15 +1,13 @@
 import tensorflow as tf
 from tensorflow.examples.tutorials.mnist import input_data
 
-"""
-place_holder+conv2d+pool2d+circle+fcn(reshape)+out+get logits+ loss + optimizer+sess(train)+acc
-"""
+
 minst = input_data.read_data_sets('MINST_data', one_hot=True)
 
-learning_rate = 0.001
+learning_rate = 0.0005
 batch_size = 128
 num_step = 2000
-display_step = 100
+display_step = 200
 
 input_size = 784
 num_labels = 10
@@ -20,23 +18,28 @@ ys = tf.placeholder(tf.float32, [batch_size, num_labels])
 keep_prob = tf.placeholder(tf.float32)
 
 
-def conv2d(input, W, b, stride=1):
+def conv1d(input, W, b, strides=1):
 
-    conv = tf.nn.conv2d(input, W, strides=[1, stride, stride, 1], padding='SAME')
+    conv = tf.nn.conv1d(input, W, strides, padding='SAME')
 
     return tf.nn.bias_add(conv, b)
 
-def maxpool2d(input, stride=2):
-    return tf.nn.max_pool(input, ksize=[1, stride, stride, 1], strides=[1, stride, stride, 1], padding='SAME')
+def maxpool1d(input, stride=2):
+    return tf.nn.pool(input,  window_shape=[stride],
+                        pooling_type="MAX", padding='SAME')
 
 
 def inference(x, W, b, dropout):
 
-    x = tf.reshape(x, shape=[-1, 28, 28, 1])
-    conv1 = conv2d(x, W['wc1'], b['bc1'])
-    pool1 = maxpool2d(conv1)
-    conv2 = conv2d(pool1, W['wc2'], b['bc2'])
-    pool2 = maxpool2d(conv2)
+    x = tf.reshape(x, shape=[-1, 784, 1])
+
+    conv1 = conv1d(x, W['wc1'], b['bc1'])
+    conv1 = tf.nn.relu(conv1)
+    pool1 = maxpool1d(conv1)
+
+    conv2 = conv1d(pool1, W['wc2'], b['bc2'])
+    conv2 = tf.nn.relu(conv2)
+    pool2 = maxpool1d(conv2)
     print pool2.get_shape().as_list()
     pool2 = tf.reshape(pool2, shape=[batch_size, -1])
     dim = pool2.shape.as_list()
@@ -49,8 +52,8 @@ def inference(x, W, b, dropout):
     return out
 
 Weights = {
-    'wc1': tf.Variable(tf.random_normal([5, 5, 1, 32])),
-    'wc2': tf.Variable(tf.random_normal([5, 5, 32, 64])),
+    'wc1': tf.Variable(tf.random_normal([3, 1, 32])),
+    'wc2': tf.Variable(tf.random_normal([3, 32, 64])),
     'out': tf.Variable(tf.random_normal([1024, 10]))
 }
 
