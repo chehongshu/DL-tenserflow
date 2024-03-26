@@ -196,7 +196,7 @@ def make_batches(id_list, batch_size, num_step):
     return list(zip(data_batches, label_batches))
 
 
-def main():
+if __name__ == '__main__':
     # 定义初始化函数。
     initializer = tf.random_uniform_initializer(-0.05, 0.05)
     #      initializer: default initializer for variables within this scope.
@@ -235,7 +235,4 @@ def main():
         _, test_pplx = run_epoch(session, eval_model, test_batches, tf.no_op(), False, 0)
         print "Test Preplex: %.3f" % test_pplx
 
-
-if __name__ == '__main__':
-    main()
 
