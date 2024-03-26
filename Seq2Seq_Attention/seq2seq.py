@@ -1,8 +1,8 @@
 # -*- coding:UTF-8 -*-
 """
 @Function:普通seq2seq模型的训练文件
-@Author:Che_Hongshu
-@Modify:2018.1.9
+@Author:ssssss
+@Modify:20240326
 """
 import tensorflow as tf
 
